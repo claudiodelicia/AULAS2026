@@ -1,0 +1,72 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_title %}{{ 'Editar' if produto else 'Novo' }} Produto - Admin{% endblock %}
+{% block page_title %}{{ 'Editar' if produto else 'Novo' }} Produto{% endblock %}
+
+{% block admin_content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <form action="{{ url_for('admin_editar_produto', produto_id=produto.id) if produto else url_for('admin_novo_produto') }}" method="POST">
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="nome" class="form-label">Nome do Produto *</label>
+                            <input type="text" class="form-control" id="nome" name="nome"
+                                   value="{{ produto.nome if produto else '' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="categoria_id" class="form-label">Categoria *</label>
+                            <select class="form-select" id="categoria_id" name="categoria_id" required>
+                                <option value="">Selecione...</option>
+                                {% for cat in categorias %}
+                                <option value="{{ cat.id }}" {{ 'selected' if produto and produto.categoria_id == cat.id }}>
+                                    {{ cat.nome }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ produto.descricao if produto else '' }}</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="preco" class="form-label">Preço (R$) *</label>
+                            <input type="number" class="form-control" id="preco" name="preco" step="0.01" min="0"
+                                   value="{{ produto.preco if produto else '' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="estoque" class="form-label">Estoque *</label>
+                            <input type="number" class="form-control" id="estoque" name="estoque" min="0"
+                                   value="{{ produto.estoque if produto else 0 }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="imagem_url" class="form-label">URL da Imagem</label>
+                            <input type="url" class="form-control" id="imagem_url" name="imagem_url"
+                                   value="{{ produto.imagem_url if produto else '' }}" placeholder="https://...">
+                        </div>
+                    </div>
+
+                    {% if produto and produto.imagem_url %}
+                    <div class="mb-3">
+                        <label class="form-label">Preview:</label><br>
+                        <img src="{{ produto.imagem_url }}" class="rounded" style="max-height: 100px;">
+                    </div>
+                    {% endif %}
+
+                    <hr>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> {{ 'Salvar Alterações' if produto else 'Criar Produto' }}
+                        </button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

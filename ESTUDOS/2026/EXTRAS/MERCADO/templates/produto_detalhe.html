@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ produto.nome }} - Mercado Olsen{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Início</a></li>
+            <li class="breadcrumb-item active">{{ produto.nome }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-md-5">
+            <img src="{{ produto.imagem_url or 'https://via.placeholder.com/500x400?text=Sem+Imagem' }}"
+                 class="img-fluid rounded shadow" alt="{{ produto.nome }}" style="width:100%; max-height:400px; object-fit:cover;">
+        </div>
+        <div class="col-md-7">
+            <span class="categoria-badge mb-3 d-inline-block">{{ produto.categoria_nome or 'Outros' }}</span>
+            <h2>{{ produto.nome }}</h2>
+            <p class="text-muted">{{ produto.descricao or 'Sem descrição disponível.' }}</p>
+
+            <div class="my-4">
+                <span class="preco" style="font-size: 2rem;">R$ {{ "%.2f"|format(produto.preco) }}</span>
+            </div>
+
+            {% if produto.estoque > 0 %}
+            <p class="text-success"><i class="bi bi-check-circle-fill"></i> Em estoque ({{ produto.estoque }} unidades)</p>
+            <form action="{{ url_for('adicionar_carrinho', produto_id=produto.id) }}" method="POST" class="d-flex align-items-center gap-3">
+                <div class="input-group" style="max-width: 150px;">
+                    <span class="input-group-text">Qtd</span>
+                    <input type="number" name="quantidade" value="1" min="1" max="{{ produto.estoque }}" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primario btn-lg">
+                    <i class="bi bi-cart-plus"></i> Adicionar ao Carrinho
+                </button>
+            </form>
+            {% else %}
+            <p class="text-danger"><i class="bi bi-x-circle-fill"></i> Produto esgotado</p>
+            {% endif %}
+
+            <hr class="my-4">
+            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar às compras
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

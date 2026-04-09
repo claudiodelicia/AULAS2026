@@ -1,0 +1,78 @@
+{% extends "admin/base_admin.html" %}
+{% block admin_title %}Pedido #{{ pedido.id }} - Admin{% endblock %}
+{% block page_title %}Pedido #{{ pedido.id }}{% endblock %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-receipt"></i> Itens do Pedido</h5>
+            </div>
+            <div class="card-body">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Qtd</th>
+                            <th>Preço Unit.</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in itens %}
+                        <tr>
+                            <td>{{ item.produto_nome }}</td>
+                            <td>{{ item.quantidade }}</td>
+                            <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+                            <td>R$ {{ "%.2f"|format(item.preco_unitario * item.quantidade) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                            <td><strong style="color: #2e7d32; font-size: 1.2rem;">R$ {{ "%.2f"|format(pedido.total) }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h6><i class="bi bi-person"></i> Dados do Cliente</h6>
+                <hr>
+                <p><strong>Nome:</strong> {{ pedido.cliente_nome }}</p>
+                <p><strong>E-mail:</strong> {{ pedido.cliente_email }}</p>
+                <p><strong>Data:</strong> {{ pedido.criado_em }}</p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h6><i class="bi bi-gear"></i> Atualizar Status</h6>
+                <hr>
+                <form action="{{ url_for('admin_atualizar_status', pedido_id=pedido.id) }}" method="POST">
+                    <select name="status" class="form-select mb-3">
+                        <option value="pendente" {{ 'selected' if pedido.status == 'pendente' }}>Pendente</option>
+                        <option value="confirmado" {{ 'selected' if pedido.status == 'confirmado' }}>Confirmado</option>
+                        <option value="preparando" {{ 'selected' if pedido.status == 'preparando' }}>Preparando</option>
+                        <option value="entregue" {{ 'selected' if pedido.status == 'entregue' }}>Entregue</option>
+                        <option value="cancelado" {{ 'selected' if pedido.status == 'cancelado' }}>Cancelado</option>
+                    </select>
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-check"></i> Atualizar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary mt-3 w-100">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+    </div>
+</div>
+{% endblock %}

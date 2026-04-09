@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Pedido Confirmado - Mercado Olsen{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="text-center py-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+        <h2 class="mt-3">Pedido Confirmado!</h2>
+        <p class="lead text-muted">Seu pedido #{{ pedido.id }} foi realizado com sucesso.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h5><i class="bi bi-receipt"></i> Detalhes do Pedido</h5>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small class="text-muted">Número do Pedido</small>
+                            <p><strong>#{{ pedido.id }}</strong></p>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Status</small>
+                            <p><span class="badge bg-warning text-dark">{{ pedido.status|capitalize }}</span></p>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Cliente</small>
+                            <p>{{ pedido.cliente_nome }}</p>
+                        </div>
+                        <div class="col-6">
+                            <small class="text-muted">Data</small>
+                            <p>{{ pedido.criado_em }}</p>
+                        </div>
+                    </div>
+
+                    <h6>Itens:</h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Qtd</th>
+                                <th>Preço</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in itens %}
+                            <tr>
+                                <td>{{ item.produto_nome }}</td>
+                                <td>{{ item.quantidade }}</td>
+                                <td>R$ {{ "%.2f"|format(item.preco_unitario) }}</td>
+                                <td>R$ {{ "%.2f"|format(item.preco_unitario * item.quantidade) }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                <td><strong class="preco">R$ {{ "%.2f"|format(pedido.total) }}</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-primario btn-lg">
+                    <i class="bi bi-shop"></i> Continuar Comprando
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

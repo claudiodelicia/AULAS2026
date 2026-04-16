@@ -5,19 +5,29 @@
 
 numero = int(input("digite um numero"))
 
-if numero % 2 == 0:
-    print("o numero e par")
-else:  
-     print("o numero e impar")
 if numero > 0:
     print("o numero e positivo")
+
 elif numero == 0:
     print("o numero e zero")
+
 else:
     print("o numero e negativo")
+
 if numero % 2 == 0:
     print("o numero e multiplo de 2")
+    print("o numero e par")
+    if numero % 3 == 0:
+        print("o numero e multiplo de 3")
+    elif numero % 5 == 0:
+        print("o numero e multiplo de 5")
+        
 elif numero % 3 == 0:
     print("o numero e multiplo de 3")
-elif numero % 5 == 0:
+    if numero % 5 == 0:
+        print("o numero e multiplo de 5")
+elif numero % 5 == 0:   
     print("o numero e multiplo de 5")   
+else:
+    print("não e multiplo de 2, 3 ou 5 ")
+    print("o numero e impar")

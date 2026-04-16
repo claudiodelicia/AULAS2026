@@ -3,7 +3,7 @@
 #se a velocidade for maior que o limite permitido, o programa deve informar a multa correspondente
 #urbana 60km/h
 #rodovia 110km/h
-#esscolar 30km/h
+#escolar 30km/h
 #se ela passar do limite verifique o percentual
 #20% multa leve
 #de 21 para 50% multa grave
